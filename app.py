@@ -11,6 +11,7 @@ def get_location_key(city_name):
     #объявляем параметры
     params = {"apikey": API_KEY, "q": city_name, "language": "ru-ru", "details":"true"}
     response = requests.get(url, params=params)
+    print(response.status_code)
     if response.status_code == 200:
         data = response.json()
         if data:
