@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Результаты погоды</title>
+</head>
+<body>
+    <h1>Результаты погоды</h1>
+    <p>Текущая погода: {{ weather[0] }}</p>
+    <p>Температура: {{ weather[1] }} °C</p>
+    <p>Влажность: {{ weather[2] }}%</p>
+    <p>Скорость ветра: {{ weather[3] }} км/ч</p>
+    <p>Вероятность осадков: {{ precipitation }}%</p>
+    <h2>{{ weather_status }}</h2>
+    <a href="/">Вернуться назад</a>
+</body>
+</html>

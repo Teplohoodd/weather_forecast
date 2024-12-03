@@ -3,31 +3,28 @@ import asyncio
 from json import *
 import flask
 
-API_KEY = "ICSSxjsJtHPvR1JaDcBWSQW7pig6mAKf "
+API_KEY = "wqkczCcDFmNbXtjofLmWOsKnGvJWyhFn  "
+location_url = "http://dataservice.accuweather.com/locations/v1/cities/geoposition/search"
 LAT, LON = 55.7558, 37.6173
 
-location_url = "http://dataservice.accuweather.com/locations/v1/cities/geoposition/search"
+
 params = {
     "apikey": API_KEY,
     "q": f"{LAT},{LON}",
     "details": "true"
 }
-response = requests.get(location_url, params=params)
-#print(response.status_code)
-data = response.json()
-location_key = data["Key"]
-forecast_url = f"http://dataservice.accuweather.com/forecasts/v1/daily/1day/{location_key}"
-weather_url = f"http://dataservice.accuweather.com/currentconditions/v1/{location_key}"
-#print(f"Ключ локации: {location_key}")
+
+
+
 async def basic_weather(weather_url, params):
     response = requests.get(weather_url, params=params)
     weather_data = response.json()
     discription = weather_data[0]['WeatherText']
     temp = weather_data[0]['Temperature']['Metric']['Value']
     humidity = weather_data[0]["RelativeHumidity"]
-    wind_speen = weather_data[0]["Wind"]["Speed"]["Metric"]["Value"]
+    wind_speed = weather_data[0]["Wind"]["Speed"]["Metric"]["Value"]
     #print(weather_data)
-    return [discription, temp, humidity, wind_speen]
+    return [discription, temp, humidity, wind_speed]
 
 async def precipitation_probab(params, forecast_url):
 
@@ -46,7 +43,7 @@ def check_bad_weather(weather, precipitation):
         return 5
 
     else:
-        if weather[1] < -10 or weather[1] > 30:
+        if weather[1] < -20 or weather[1] > 35:
             bad = True
 
     if weather[2] > 100 or weather[2] < 0:
@@ -67,14 +64,21 @@ def check_bad_weather(weather, precipitation):
         print("Нереалистичное значение вероятности осадков")
         return 5
     else:
-        if precipitation > 40:
+        if precipitation > 50:
             bad = True
     return bad
 
 
 
 
-async def main():
+async def main(params):
+    response = requests.get(location_url, params=params)
+    print(response.status_code)
+    data = response.json()
+    location_key = data["Key"]
+    forecast_url = f"http://dataservice.accuweather.com/forecasts/v1/daily/1day/{location_key}"
+    weather_url = f"http://dataservice.accuweather.com/currentconditions/v1/{location_key}"
+    # print(f"Ключ локации: {location_key}")
     weather = await basic_weather(weather_url, params)
     precipitation = await precipitation_probab(params, forecast_url)
 
@@ -95,7 +99,8 @@ async def main():
         print("Скорость ветра: ", weather[3])
         print("Вероятность осадков сегодня:", precipitation, "%\n")
         print("Брат, посиди дома, не испытывай судьбу..")
+if __name__ == "__main__":
+    asyncio.run(main(params))
 
-asyncio.run(main())
 
 

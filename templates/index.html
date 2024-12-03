@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Проверка погоды</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f5f7fa;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        h1 {
+            color: #4A90E2;
+            margin-top: 20px;
+        }
+
+        form {
+            background: #ffffff;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            padding: 20px;
+            width: 100%;
+            max-width: 400px;
+        }
+
+        label {
+            display: block;
+            margin: 10px 0 5px;
+            font-weight: bold;
+            color: #333333;
+        }
+
+        input {
+            width: calc(100% - 20px);
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+
+        button {
+            background-color: #4A90E2;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            font-size: 16px;
+            font-weight: bold;
+            border-radius: 4px;
+            cursor: pointer;
+            width: 100%;
+        }
+
+        button:hover {
+            background-color: #357ABD;
+        }
+
+        .result, .error {
+            margin-top: 20px;
+            padding: 15px;
+            width: 100%;
+            max-width: 400px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .result {
+            background: #DFF2BF;
+            color: #4F8A10;
+        }
+
+        .error {
+            background: #FFD2D2;
+            color: #D8000C;
+        }
+
+        p {
+            margin: 0;
+        }
+
+        @media (max-width: 480px) {
+            form {
+                padding: 15px;
+            }
+
+            input, button {
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>Проверка погодных условий</h1>
+    <form method="POST">
+        <label for="city1">Первый город:</label>
+        <input type="text" id="city1" name="city1" placeholder="Введите название первого города" required>
+        <label for="city2">Второй город:</label>
+        <input type="text" id="city2" name="city2" placeholder="Введите название второго города" required>
+        <button type="submit">Проверить</button>
+    </form>
+
+    {% if result %}
+        <div class="result">
+            <h2>Результат:</h2>
+            <p>{{ result }}</p>
+        </div>
+    {% endif %}
+
+    {% if error_message %}
+        <div class="error">
+            <h2>Ошибка:</h2>
+            <p>{{ error_message }}</p>
+        </div>
+    {% endif %}
+</body>
+</html>
