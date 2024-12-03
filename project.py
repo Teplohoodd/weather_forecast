@@ -43,24 +43,29 @@ def check_bad_weather(weather, precipitation):
 
     if weather[1] >= 60 or weather[1] <= -50:
         print("Нереалистичное значение температуры")
+        return 5
+
     else:
         if weather[1] < -10 or weather[1] > 30:
             bad = True
 
     if weather[2] > 100 or weather[2] < 0:
         print("Нереалистичное значение влажности")
+        return 5
     else:
         if weather[2] < 20 or weather[2] > 70:
             bad = True
 
-    if weather[3] < 0:
+    if weather[3] < 0 or weather[3] > 100:
         print("Нереалистичное значение скорости ветра")
+        return 5
     else:
         if weather[3] > 30:
             bad = True
 
     if precipitation < 0 or precipitation > 100:
         print("Нереалистичное значение вероятности осадков")
+        return 5
     else:
         if precipitation > 40:
             bad = True
@@ -72,14 +77,24 @@ def check_bad_weather(weather, precipitation):
 async def main():
     weather = await basic_weather(weather_url, params)
     precipitation = await precipitation_probab(params, forecast_url)
-    print("Текущая погода: ", weather[0])
-    print("Текущая температура: ", weather[1])
-    print("Относительная влажность: ", weather[2])
-    print("Скорость ветра: ", weather[3])
-    print("Вероятность осадков сегодня:", precipitation, "%\n")
-    
-    if check_bad_weather == False:
+
+    is_bad = check_bad_weather(weather, precipitation)
+    if is_bad == False:
+        print("Текущая погода: ", weather[0])
+        print("Текущая температура: ", weather[1])
+        print("Относительная влажность: ", weather[2])
+        print("Скорость ветра: ", weather[3])
+        print("Вероятность осадков сегодня:", precipitation, "%\n")
         print("Погодные условия - супер!")
+    elif is_bad == 5:
+        ...
     else:
+        print("Текущая погода: ", weather[0])
+        print("Текущая температура: ", weather[1])
+        print("Относительная влажность: ", weather[2])
+        print("Скорость ветра: ", weather[3])
+        print("Вероятность осадков сегодня:", precipitation, "%\n")
         print("Брат, посиди дома, не испытывай судьбу..")
+
 asyncio.run(main())
+
