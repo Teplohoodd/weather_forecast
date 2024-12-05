@@ -118,5 +118,27 @@
             <p>{{ error_message }}</p>
         </div>
     {% endif %}
+{% if weather_info1 %}
+    <div class="result">
+        <h2>Погода в {{ request.form.get("city1") }}</h2>
+        <p><strong>Описание:</strong> {{ weather_info1.description }}</p>
+        <p><strong>Температура:</strong> {{ weather_info1.temperature }} °C</p>
+        <p><strong>Влажность:</strong> {{ weather_info1.humidity }}%</p>
+        <p><strong>Скорость ветра:</strong> {{ weather_info1.wind_speed }} км/ч</p>
+        <p><strong>Вероятность осадков:</strong> {{ weather_info1.precipitation }}%</p>
+    </div>
+{% endif %}
+
+{% if weather_info2 %}
+    <div class="result">
+        <h2>Погода в {{ request.form.get("city2") }}</h2>
+        <p><strong>Описание:</strong> {{ weather_info2.description }}</p>
+        <p><strong>Температура:</strong> {{ weather_info2.temperature }} °C</p>
+        <p><strong>Влажность:</strong> {{ weather_info2.humidity }}%</p>
+        <p><strong>Скорость ветра:</strong> {{ weather_info2.wind_speed }} км/ч</p>
+        <p><strong>Вероятность осадков:</strong> {{ weather_info2.precipitation }}%</p>
+    </div>
+{% endif %}
+
 </body>
 </html>

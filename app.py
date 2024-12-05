@@ -3,7 +3,6 @@ import requests
 import asyncio
 from project import basic_weather, precipitation_probab, check_bad_weather, API_KEY
 
-
 url = "http://dataservice.accuweather.com/locations/v1/cities/search"
 app = Flask(__name__)
 #использую новую функцию, поскольку нужно задавать города нужно с клавиатуры
@@ -19,12 +18,13 @@ def get_location_key(city_name):
     #обрабатываем ошибку
     return None
 
-
 @app.route("/", methods=["GET", "POST"])
 def index():
     #инициализируем переменные, которые будем выводить
     result = None
     error_message = None
+    weather_info1 = None
+    weather_info2 = None
     #делаем post-запрос
     if request.method == "POST":
         city1 = request.form.get("city1")
@@ -56,6 +56,23 @@ def index():
             # Получаем результаты о благоприятности погодных условий
             bad_weather1 = check_bad_weather(weather1, precipitation1)
             bad_weather2 = check_bad_weather(weather2, precipitation2)
+
+            # Добавляем данные о погоде для вывода
+            weather_info1 = {
+                "description": weather1[0],
+                "temperature": weather1[1],
+                "humidity": weather1[2],
+                "wind_speed": weather1[3],
+                "precipitation": precipitation1,
+            }
+            weather_info2 = {
+                "description": weather2[0],
+                "temperature": weather2[1],
+                "humidity": weather2[2],
+                "wind_speed": weather2[3],
+                "precipitation": precipitation2,
+            }
+
             # Сравниваем погодные условия в двух городах, чтобы сделать решение о поездке
             if bad_weather1 or bad_weather2:
                 result = "Погода плохая, поездку стоит отложить"
@@ -64,7 +81,8 @@ def index():
         # Перехватываем все ошибки, чтобы потом отобразить их в случае чего на странице
         except Exception as e:
             error_message = str(e)
-    return render_template("index.html", result=result, error_message=error_message)
+    return render_template("index.html", result=result, error_message=error_message,
+                           weather_info1=weather_info1, weather_info2=weather_info2)
 
 if __name__ == "__main__":
     app.run(debug=True)
